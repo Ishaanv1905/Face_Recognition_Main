@@ -78,14 +78,14 @@ function confirmAttendance()
         },
         body: JSON.stringify({
             name: lastRecognizedName,
-            employee_id: lastRecognizedId
+            employee_id: lastRecognizedID
         })
     })
         //alert("hello")
         .then(response => response.json())
         .then(data => {
             if (data.result) 
-                {   alert("hello")
+                {   //alert("hello")
                 alert(`Attendance marked for ${lastRecognizedName}!`);
                 window.location.href = '/';
             } else if (data.error) {

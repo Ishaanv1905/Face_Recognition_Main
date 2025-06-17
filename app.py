@@ -33,5 +33,8 @@ def check_users():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 
-
-
+#need to fix- 
+#1)attendance tab, alert error message printing
+#2)error handling for registration page(user already registered)..make layout better
+#3)database 
+#4)view attendance feature

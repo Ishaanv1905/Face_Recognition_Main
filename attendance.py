@@ -52,11 +52,10 @@ def mark_attendance():
 @attendance_bp.route('/make_attendance_entry', methods=['POST'])
 def make_attendance_entry():
     data = request.get_json()
-    
     employee_id = data.get('employee_id')
     name = data.get('name')
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+    #exit()
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO attendance (employee_id, name, timestamp) VALUES (?, ?, ?)",
