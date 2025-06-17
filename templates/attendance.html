@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Face Recognition - Attendance</title>
+    <style>
+    .hidden {
+        display: none;
+    }
+</style>
+</head>
+<body>
+    <h1>Face Recognition - Attendance</h1>
+
+    <!-- Home Button -->
+    <button onclick="window.location.href='/'">Go Back to Home</button><br><br>
+
+    <!-- Start Camera Button -->
+    <button type="button" onclick="startAttendanceCamera()">Start Camera</button><br><br>
+
+    <!-- Camera Video Feed -->
+    <div id="cameraContainerAttendance" class="hidden">
+        <video id="videoAttendance" width="320" height="240" autoplay></video><br>
+    </div>
+
+    <!-- Confirmation Box -->
+    <div id="confirmationContainer" class="hidden">
+        <h3 id="confirmationMessage"></h3>
+        <button onclick="confirmAttendance()">Yes, this is me</button>
+        <button onclick="rejectAttendance()">No, scan again</button>
+    </div>
+
+    <!-- Scanning Message -->
+    <div id="scanningMessageContainer"></div>
+
+    <!-- JS Script -->
+    <script src="{{ url_for('static', filename='attendance_script.js') }}"></script>
+</body>
+</html>
