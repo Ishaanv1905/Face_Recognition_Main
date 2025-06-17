@@ -65,11 +65,12 @@ function showConfirmationPopup() {
     }
     document.getElementById('confirmationContainer').classList.remove('hidden');
     // Show confirmation message
-    document.getElementById('confirmationMessage').innerText = `Mark attendance for:\nName: ${lastRecognizedName}? \nEmployee ID: ${lastRecognizedID}? `;
+    document.getElementById('confirmationMessage').innerText = `Mark attendance for: Name- ${lastRecognizedName}   Employee ID- ${lastRecognizedID} `;
     
 }
 
-function confirmAttendance() {
+function confirmAttendance() 
+{
     fetch('/api/make_attendance_entry', {
         method: 'POST',
         headers: {
@@ -80,9 +81,11 @@ function confirmAttendance() {
             employee_id: lastRecognizedId
         })
     })
+        //alert("hello")
         .then(response => response.json())
         .then(data => {
-            if (data.result) {
+            if (data.result) 
+                {   alert("hello")
                 alert(`Attendance marked for ${lastRecognizedName}!`);
                 window.location.href = '/';
             } else if (data.error) {
