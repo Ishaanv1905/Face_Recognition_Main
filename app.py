@@ -38,3 +38,4 @@ if __name__ == '__main__':
 #2)error handling for registration page(user already registered)..make layout better
 #3)database 
 #4)view attendance feature
+#5) face_recognition file 
