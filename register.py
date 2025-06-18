@@ -4,7 +4,6 @@ from database import get_db_connection
 import io
 from PIL import Image
 import numpy as np
-#import cv2
 import sqlite3
 
 register_bp = Blueprint('register', __name__)
@@ -48,3 +47,22 @@ def register():
         return jsonify({'error': 'Employee ID already exists'}), 409
 
     return jsonify({'result': f'Employee {name} registered successfully'}), 200
+
+
+@register_bp.route('/integrity_check', methods=['POST'])
+def integrity_check():
+    data = request.get_json()
+    employee_id = data.get('employee_id')
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM employees WHERE employee_id = ?", (employee_id,))
+            result = cursor.fetchone()
+            if result:
+                return jsonify({'exists': True}), 200
+            else:
+                return jsonify({'exists': False}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    

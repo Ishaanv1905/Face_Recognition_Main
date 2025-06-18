@@ -2,6 +2,41 @@ let capturedImages = [];
 let userId = '';
 let userName = '';
 
+
+function check_if_new_user(userId) {
+    fetch('/api/integrity_check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ employee_id: userId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.exists) {
+            alert('Employee ID already exists. Please use a unique ID.');
+        } else {
+            // If ID is unique, start camera
+            capturedImages = [];
+            document.getElementById('cameraContainer').classList.remove('hidden');
+
+            let video = document.getElementById('video');
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(error => {
+                    console.error('Error accessing camera:', error);
+                    alert('Could not access the camera.');
+                });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Integrity check failed.');
+    });
+}
+
 // Start camera for registration
 function startCamera() {
     userId = document.getElementById('userId').value.trim();
@@ -12,18 +47,8 @@ function startCamera() {
         return;
     }
 
-    capturedImages = [];
-    document.getElementById('cameraContainer').classList.remove('hidden');
-
-    let video = document.getElementById('video');
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-        })
-        .catch(error => {
-            console.error('Error accessing camera:', error);
-            alert('Could not access the camera.');
-        });
+    // Only call the integrity check here
+    check_if_new_user(userId);
 }
 
 // Capture photo for registration
