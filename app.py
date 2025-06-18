@@ -22,6 +22,10 @@ def register():
 def attendance():
     return render_template('attendance.html')
 
+@app.route('/attendance_view.html')
+def attendance_view():
+    return render_template('attendance_view.html')
+
 @app.route('/api/check_users', methods=['GET'])
 def check_users():
     with get_db_connection() as conn:
