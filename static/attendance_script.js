@@ -47,8 +47,9 @@ function sendAttendance(photoBlob) {
             lastRecognizedID = employee_id; // Store the ID if needed
             //console.log(`Name: ${name}, ID: ${employee_id}`);
             showConfirmationPopup(); // You can also pass name and id to this function if needed
-        } else if (data.error) {
-            alert(` error:\n\n${JSON.stringify(data, null, 2)}`);
+        } else if (data.error) 
+            {
+            alert(data.error);
             console.log('Face not recognized. Trying again...');
             // Continue scanning
         }

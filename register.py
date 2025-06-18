@@ -1,3 +1,4 @@
+#python file for registrations
 from flask import Blueprint, request, jsonify
 from face_recognition import capture_face
 from database import get_db_connection
@@ -37,15 +38,11 @@ def register():
     embedding_str = ' '.join(map(str, np.array(avg_embedding).flatten()))
 
     # Save to database
-    try:
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO employees (employee_id, name, embedding) VALUES (?, ?, ?)",
-                           (employee_id, name, embedding_str))
-            conn.commit()
-    except sqlite3.IntegrityError:
-        return jsonify({'error': 'Employee ID already exists'}), 409
-
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO employees (employee_id, name, embedding) VALUES (?, ?, ?)",
+                        (employee_id, name, embedding_str))
+        conn.commit()
     return jsonify({'result': f'Employee {name} registered successfully'}), 200
 
 

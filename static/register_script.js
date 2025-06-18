@@ -1,3 +1,4 @@
+//js file for managing the frontend of the registration
 let capturedImages = [];
 let userId = '';
 let userName = '';
@@ -15,6 +16,7 @@ function check_if_new_user(userId) {
     .then(data => {
         if (data.exists) {
             alert('Employee ID already exists. Please use a unique ID.');
+            document.getElementById('userId').value = '';
         } else {
             // If ID is unique, start camera
             capturedImages = [];
@@ -84,14 +86,18 @@ function sendRegistration() {
     })
     .then(response => response.json())
     .then(data => {
-        // Show the entire JSON response in the alert (pretty-printed)
-        alert(`Registration Complete:\n\n${JSON.stringify(data, null, 2)}`);
-        resetCamera();
+        if(data.result)
+        {
+            alert(data.result);
+            resetCamera();
+        }
     })
     .catch(error => {
         console.error('Error:', error);
         alert('Registration failed.');
     });
+    document.getElementById('userId').value = '';
+    document.getElementById('userName').value = '';
 }
 
 // Stop camera and reset

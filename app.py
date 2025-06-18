@@ -1,3 +1,4 @@
+#this is the main python file that is like a home page for the backend
 from flask import Flask, render_template,jsonify
 from register import register_bp
 from attendance import attendance_bp
@@ -35,7 +36,7 @@ if __name__ == '__main__':
 
 #need to fix- 
 #1)attendance tab, alert error message printing
-#2)error handling for registration page(user already registered)..make layout better
+#2)registration page make layout better
 #3)database 
 #4)view attendance feature
 #5) face_recognition file 
