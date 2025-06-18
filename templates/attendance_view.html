@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Logs</title>
+</head>
+<body>
+    <h1>Attendance Logs</h1>
+
+    <table id="attendanceTable" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here -->
+        </tbody>
+    </table>
+
+    <br>
+    <button onclick="window.location.href='/'">Back to Home</button>
+
+    <script src="{{ url_for('static', filename='attendance_view_script.js') }}"></script>
+</body>
+</html>

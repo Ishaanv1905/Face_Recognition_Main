@@ -10,8 +10,6 @@ function startAttendanceCamera() {
         .then(stream => {
             video.srcObject = stream;
             videoStream = stream;
-
-            // Start auto-capture every 2 seconds
             captureInterval = setInterval(() => {
                 captureAttendanceFrame(video);
             }, 2000);
@@ -42,11 +40,10 @@ function sendAttendance(photoBlob) {
     .then(response => response.json())
     .then(data => {
         if (data.result) {
-            const { name, employee_id } = data.result;  // Destructure name and id
-            lastRecognizedName = name; // You can use this however you want
-            lastRecognizedID = employee_id; // Store the ID if needed
-            //console.log(`Name: ${name}, ID: ${employee_id}`);
-            showConfirmationPopup(); // You can also pass name and id to this function if needed
+            const { name, employee_id } = data.result;  
+            lastRecognizedName = name; 
+            lastRecognizedID = employee_id; 
+            showConfirmationPopup(); 
         } else if (data.error) 
             {
             alert(data.error);
@@ -90,7 +87,7 @@ function confirmAttendance()
                 alert(`Attendance marked for ${lastRecognizedName}!`);
                 window.location.href = '/';
             } else if (data.error) {
-                alert(` error:\n\n${JSON.stringify(data, null, 2)}`);
+                alert(data.error);
                 console.log('Face not recognized. Trying again...');
             }
         })

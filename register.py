@@ -5,7 +5,6 @@ from database import get_db_connection
 import io
 from PIL import Image
 import numpy as np
-import sqlite3
 
 register_bp = Blueprint('register', __name__)
 

@@ -7,7 +7,6 @@ import numpy as np
 from datetime import datetime
 
 attendance_bp = Blueprint('attendance', __name__)
-
 @attendance_bp.route('/mark_attendance', methods=['POST'])
 def mark_attendance():
     if 'image' not in request.files:
@@ -55,11 +54,9 @@ def make_attendance_entry():
     employee_id = data.get('employee_id')
     name = data.get('name')
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #exit()
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO attendance (employee_id, name, timestamp) VALUES (?, ?, ?)",
                        (employee_id, name, timestamp))
         conn.commit()
-
     return jsonify({'result': f'attendance marked for {name}'}), 200
