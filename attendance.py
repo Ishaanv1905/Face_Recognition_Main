@@ -6,6 +6,7 @@ from PIL import Image
 import numpy as np
 from datetime import datetime
 
+threshold = 0.9
 attendance_bp = Blueprint('attendance', __name__)
 @attendance_bp.route('/mark_attendance', methods=['POST'])
 def mark_attendance():
@@ -29,14 +30,14 @@ def mark_attendance():
     matched_employee = None
 
     for emp in employees:
-        emp_embedding = np.fromstring(emp['embedding'], sep=' ')
+        emp_embedding = np.fromstring(emp['embedding'], sep=' ', dtype=float)
         distance = np.linalg.norm(emp_embedding - captured_embedding)
 
         if distance < min_distance:
             min_distance = distance
             matched_employee = emp
 
-    if min_distance < 0.9:
+    if min_distance < threshold:
         return jsonify(
             {
             "result": {
