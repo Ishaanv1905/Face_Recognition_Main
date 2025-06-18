@@ -2,9 +2,18 @@
 let capturedImages = [];
 let userId = '';
 let userName = '';
+let photoAttempts = 0; // Added to track number of photo attempts
 
+function setRegisterFeedback(message, isError = false) {
+    const feedback = document.getElementById('registerFeedback');
+    if (feedback) {
+        feedback.innerText = message;
+        feedback.style.color = isError ? 'red' : 'green';
+    }
+}
 
 function check_if_new_user(userId) {
+    setRegisterFeedback('');
     fetch('/api/integrity_check', {
         method: 'POST',
         headers: {
@@ -15,13 +24,13 @@ function check_if_new_user(userId) {
     .then(response => response.json())
     .then(data => {
         if (data.exists) {
-            alert('Employee ID already exists. Please use a unique ID.');
+            setRegisterFeedback('Employee ID already exists. Please use a unique ID.', true);
             document.getElementById('userId').value = '';
         } else {
-            // If ID is unique, start camera
             capturedImages = [];
+            photoAttempts = 0; // Reset attempts on new user
+            document.getElementById('photoCount').innerText = 'Photos Captured: 0/3'; // Reset counter
             document.getElementById('cameraContainer').classList.remove('hidden');
-
             let video = document.getElementById('video');
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
@@ -29,23 +38,24 @@ function check_if_new_user(userId) {
                 })
                 .catch(error => {
                     console.error('Error accessing camera:', error);
-                    alert('Could not access the camera.');
+                    setRegisterFeedback('Could not access the camera.', true);
                 });
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Integrity check failed.');
+        setRegisterFeedback('Integrity check failed.', true);
     });
 }
 
 // Start camera for registration
 function startCamera() {
+    setRegisterFeedback('');
     userId = document.getElementById('userId').value.trim();
     userName = document.getElementById('userName').value.trim();
 
     if (userId === '' || userName === '') {
-        alert('Please enter your name and employee ID.');
+        setRegisterFeedback('Please enter your name and employee ID.', true);
         return;
     }
 
@@ -55,6 +65,11 @@ function startCamera() {
 
 // Capture photo for registration
 function capturePhoto() {
+    setRegisterFeedback('');
+    if (capturedImages.length >= 3) {
+        setRegisterFeedback('You can only capture up to 3 photos.', true); // Prevent more than 3 photos
+        return;
+    }
     let video = document.getElementById('video');
     let canvas = document.createElement('canvas');
     canvas.width = 320;
@@ -63,6 +78,7 @@ function capturePhoto() {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     canvas.toBlob(blob => {
         capturedImages.push(blob);
+        photoAttempts++;
         document.getElementById('photoCount').innerText = `Photos Captured: ${capturedImages.length}/3`;
 
         if (capturedImages.length === 3) {
@@ -73,6 +89,7 @@ function capturePhoto() {
 
 // Send registration data
 function sendRegistration() {
+    setRegisterFeedback('Registering user...');
     let formData = new FormData();
     formData.append('employee_id', userId);
     formData.append('name', userName);
@@ -88,13 +105,28 @@ function sendRegistration() {
     .then(data => {
         if(data.result)
         {
-            alert(data.result);
+            setRegisterFeedback(data.result);
             resetCamera();
+        } else if (data.error) {
+            // If error is about a specific photo, reset process and close camera
+            if (data.error.includes('No face detected') || data.error.includes('Invalid image')) {
+                setRegisterFeedback(data.error + ' Please try again. All photos will be retaken.', true); // Notify user
+                resetCamera(); // Close camera and reset counter
+                capturedImages = [];
+                photoAttempts = 0;
+                document.getElementById('photoCount').innerText = 'Photos Captured: 0/3';
+            } else {
+                setRegisterFeedback(data.error, true);
+            }
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Registration failed.');
+        setRegisterFeedback('Registration failed.', true);
+        resetCamera();
+        capturedImages = [];
+        photoAttempts = 0;
+        document.getElementById('photoCount').innerText = 'Photos Captured: 0/3';
     });
     document.getElementById('userId').value = '';
     document.getElementById('userName').value = '';

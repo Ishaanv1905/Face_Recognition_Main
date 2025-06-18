@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Attendance Logs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Attendance Logs</h1>
@@ -21,8 +23,10 @@
         </tbody>
     </table>
 
+    <div id="attendanceViewFeedback" class="feedback"></div>
+
     <br>
-    <button onclick="window.location.href='/'">Back to Home</button>
+    <button onclick="window.location.href='/'" aria-label="Back to Home">Back to Home</button>
 
     <script src="{{ url_for('static', filename='attendance_view_script.js') }}"></script>
 </body>

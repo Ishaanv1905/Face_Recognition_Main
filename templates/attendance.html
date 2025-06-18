@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Face Recognition - Attendance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
     .hidden {
         display: none;
@@ -13,10 +15,10 @@
     <h1>Face Recognition - Attendance</h1>
 
     <!-- Home Button -->
-    <button onclick="window.location.href='/'">Go Back to Home</button><br><br>
+    <button onclick="window.location.href='/'" aria-label="Go Back to Home">Go Back to Home</button><br><br>
 
     <!-- Start Camera Button -->
-    <button type="button" onclick="startAttendanceCamera()">Start Camera</button><br><br>
+    <button type="button" onclick="startAttendanceCamera()" aria-label="Start Camera">Start Camera</button><br><br>
 
     <!-- Camera Video Feed -->
     <div id="cameraContainerAttendance" class="hidden">
@@ -26,12 +28,14 @@
     <!-- Confirmation Box -->
     <div id="confirmationContainer" class="hidden">
         <h3 id="confirmationMessage"></h3>
-        <button onclick="confirmAttendance()">Yes, this is me</button>
-        <button onclick="rejectAttendance()">No, scan again</button>
+        <button onclick="confirmAttendance()" aria-label="Confirm Attendance">Yes, this is me</button>
+        <button onclick="rejectAttendance()" aria-label="Reject Attendance">No, scan again</button>
     </div>
 
     <!-- Scanning Message -->
     <div id="scanningMessageContainer"></div>
+
+    <div id="attendanceFeedback" class="feedback"></div>
 
     <!-- JS Script -->
     <script src="{{ url_for('static', filename='attendance_script.js') }}"></script>

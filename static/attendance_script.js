@@ -2,9 +2,18 @@ let videoStream = null;
 let captureInterval = null;
 let lastRecognizedName = '';
 let lastRecognizedID='';
-function startAttendanceCamera() {
-    document.getElementById('cameraContainerAttendance').classList.remove('hidden');
 
+function setAttendanceFeedback(message, isError = false) {
+    const feedback = document.getElementById('attendanceFeedback');
+    if (feedback) {
+        feedback.innerText = message;
+        feedback.style.color = isError ? 'red' : 'green';
+    }
+}
+
+function startAttendanceCamera() {
+    setAttendanceFeedback('');
+    document.getElementById('cameraContainerAttendance').classList.remove('hidden');
     let video = document.getElementById('videoAttendance');
     navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
@@ -14,7 +23,10 @@ function startAttendanceCamera() {
                 captureAttendanceFrame(video);
             }, 2000);
         })
-        .catch(error => console.error('Error accessing camera:', error));
+        .catch(error => {
+            console.error('Error accessing camera:', error);
+            setAttendanceFeedback('Could not access the camera.', true);
+        });
 }
 
 function captureAttendanceFrame(video) {
@@ -23,16 +35,15 @@ function captureAttendanceFrame(video) {
     canvas.height = 240;
     let context = canvas.getContext('2d');
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
     canvas.toBlob(blob => {
         sendAttendance(blob);
     }, 'image/jpeg');
 }
 
 function sendAttendance(photoBlob) {
+    setAttendanceFeedback('Recognizing face...');
     let formData = new FormData();
     formData.append('image', photoBlob);
-
     fetch('/api/mark_attendance', {
     method: 'POST',
     body: formData
@@ -44,31 +55,31 @@ function sendAttendance(photoBlob) {
             lastRecognizedName = name; 
             lastRecognizedID = employee_id; 
             showConfirmationPopup(); 
+            setAttendanceFeedback('');
         } else if (data.error) 
             {
-            alert(data.error);
+            setAttendanceFeedback(data.error, true);
             console.log('Face not recognized. Trying again...');
-            // Continue scanning
         }
     })
-    .catch(error => console.error('Error:', error));
-
+    .catch(error => {
+        console.error('Error:', error);
+        setAttendanceFeedback('Attendance recognition failed.', true);
+    });
 }
 
 function showConfirmationPopup() {
-    // Stop auto-capturing
     if (captureInterval) {
         clearInterval(captureInterval);
         captureInterval = null;
     }
     document.getElementById('confirmationContainer').classList.remove('hidden');
-    // Show confirmation message
     document.getElementById('confirmationMessage').innerText = `Mark attendance for: Name- ${lastRecognizedName}   Employee ID- ${lastRecognizedID} `;
-    
 }
 
 function confirmAttendance() 
 {
+    setAttendanceFeedback('Marking attendance...');
     fetch('/api/make_attendance_entry', {
         method: 'POST',
         headers: {
@@ -79,39 +90,35 @@ function confirmAttendance()
             employee_id: lastRecognizedID
         })
     })
-        //alert("hello")
         .then(response => response.json())
         .then(data => {
             if (data.result) 
-                {   //alert("hello")
-                alert(`Attendance marked for ${lastRecognizedName}!`);
+                {   
+                setAttendanceFeedback(`Attendance marked for ${lastRecognizedName}!`);
                 window.location.href = '/';
             } else if (data.error) {
-                alert(data.error);
+                setAttendanceFeedback(data.error, true);
                 console.log('Face not recognized. Trying again...');
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+            setAttendanceFeedback('Attendance marking failed.', true);
+        });
 }
 
-
 function rejectAttendance() {
+    setAttendanceFeedback('');
     document.getElementById('confirmationContainer').classList.add('hidden');
     document.getElementById('confirmationMessage').innerText = '';
-
-    // Show scanning message
     let scanningMessage = document.createElement('p');
     scanningMessage.id = 'scanningMessage';
     scanningMessage.innerText = 'Okay, scanning face again...';
     document.body.appendChild(scanningMessage);
-
-    // Restart auto-capturing
     let video = document.getElementById('videoAttendance');
     captureInterval = setInterval(() => {
         captureAttendanceFrame(video);
     }, 2000);
-
-    // Remove the scanning message after 2 seconds
     setTimeout(() => {
         let msg = document.getElementById('scanningMessage');
         if (msg) {
@@ -125,13 +132,12 @@ function resetAttendanceCamera() {
         clearInterval(captureInterval);
         captureInterval = null;
     }
-
     if (videoStream) {
         let tracks = videoStream.getTracks();
         tracks.forEach(track => track.stop());
     }
-
     document.getElementById('cameraContainerAttendance').classList.add('hidden');
     document.getElementById('confirmationContainer').classList.add('hidden');
     document.getElementById('confirmationMessage').innerText = '';
+    setAttendanceFeedback('');
 }

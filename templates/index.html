@@ -2,16 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Face Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Face Recognition Attendance System</h1>
 
     <!-- Navigation Buttons -->
     <div id="navButtons">
-        <button onclick="window.location.href = '/register.html'">Register New User</button>
-        <button onclick="checkUsersBeforeAttendance()">Update Attendance</button>
-        <button onclick="window.location.href = '/attendance_view.html'">View Attendance</button>
+        <button onclick="window.location.href = '/register.html'" aria-label="Register New User">Register New User</button>
+        <button onclick="checkUsersBeforeAttendance()" aria-label="Update Attendance">Update Attendance</button>
+        <button onclick="window.location.href = '/attendance_view.html'" aria-label="View Attendance">View Attendance</button>
     </div>
     <script src="{{ url_for('static', filename='index_script.js') }}"></script>
 </body>

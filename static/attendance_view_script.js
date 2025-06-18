@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const feedback = document.getElementById('attendanceViewFeedback');
+    if (feedback) feedback.innerText = '';
     fetch('/api/attendance_logs')
         .then(response => response.json())
         .then(data => {
@@ -12,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 cell.innerText = 'No attendance records found.';
                 row.appendChild(cell);
                 tableBody.appendChild(row);
+                if (feedback) feedback.innerText = 'No attendance records found.';
             } else {
                 logs.forEach(log => {
                     const row = document.createElement('tr');
@@ -34,10 +37,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     tableBody.appendChild(row);
                 });
+                if (feedback) feedback.innerText = '';
             }
         })
         .catch(error => {
             console.error('Error fetching attendance logs:', error);
-            alert('Failed to load attendance logs.');
+            if (feedback) {
+                feedback.innerText = 'Failed to load attendance logs.';
+            } else {
+                alert('Failed to load attendance logs.');
+            }
         });
 });

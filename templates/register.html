@@ -2,28 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Register New User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Register New User</h1>
 
     <form id="registerForm" onsubmit="event.preventDefault();">
         <label for="userName">Name:</label><br>
-        <input type="text" id="userName" required><br><br>
+        <input type="text" id="userName" required aria-required="true"><br><br>
         <label for="userId">Employee ID:</label><br>
-        <input type="text" id="userId" required><br><br>
+        <input type="text" id="userId" required aria-required="true"><br><br>
 
-        <button type="button" onclick="startCamera('register')">Start Camera</button><br><br>
+        <button type="button" onclick="startCamera('register')" aria-label="Start Camera">Start Camera</button><br><br>
 
         <div id="cameraContainer" class="hidden">
             <video id="video" width="320" height="240" autoplay></video><br>
             <p id="instruction">Take 3 photos of yourself, each slightly varied for better recognition.</p>
-            <button type="button" onclick="capturePhoto()">Capture Photo</button><br>
+            <button type="button" onclick="capturePhoto()" aria-label="Capture Photo">Capture Photo</button><br>
             <p id="photoCount">Photos Captured: 0/3</p>
         </div>
+        <div id="registerFeedback" class="feedback"></div>
     </form>
 
-    <button onclick="window.location.href = '/'">Back to Home</button>
+    <button onclick="window.location.href = '/'" aria-label="Back to Home">Back to Home</button>
 
     <script src="{{ url_for('static', filename='register_script.js') }}"></script>
 </body>

@@ -1,0 +1,60 @@
+/* Added feedback message styling */
+.feedback {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* Added hidden class for toggling visibility */
+.hidden {
+    display: none;
+}
+
+/* Basic responsive layout improvements */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f8f9fa;
+}
+h1 {
+    color: #333;
+}
+button {
+    margin: 5px 0;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #007bff;
+    background: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+button:hover {
+    background: #0056b3;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+}
+th, td {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+@media (max-width: 600px) {
+    body {
+        padding: 5px;
+    }
+    table, th, td {
+        font-size: 0.9rem;
+    }
+    button {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+}
+/* Added basic responsive and visual improvements */
