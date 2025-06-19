@@ -19,12 +19,7 @@ def register():
         employee_id = request.form['employee_id']
         name = request.form['name']
         embeddings = []
-        # Check for duplicate employee_id
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT 1 FROM employees WHERE employee_id = ?", (employee_id,))
-            if cursor.fetchone():
-                return jsonify({'error': 'Employee ID already exists'}), 400  # Added duplicate check
+        
         for photo_key in ['photo1', 'photo2', 'photo3']:
             file = request.files[photo_key]
             try:
@@ -37,8 +32,10 @@ def register():
             if embedding is None:
                 return jsonify({'error': f'No face detected in {photo_key}'}), 400
             embeddings.append(embedding)
+            
         avg_embedding = np.mean(embeddings, axis=0)
         embedding_str = ' '.join(map(str, np.array(avg_embedding).flatten()))
+        
         with get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("INSERT INTO employees (employee_id, name, embedding) VALUES (?, ?, ?)",
@@ -46,6 +43,7 @@ def register():
             conn.commit()
         logging.info(f"Employee {name} registered successfully.")  # Added logging
         return jsonify({'result': f'Employee {name} registered successfully'}), 200
+    
     except Exception as e:
         logging.error(f"Error in register: {e}")  # Added logging
         return jsonify({'error': 'Failed to register employee'}), 500  # Added error handling

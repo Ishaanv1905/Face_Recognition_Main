@@ -5,11 +5,11 @@ import io
 from PIL import Image
 import numpy as np
 from datetime import datetime
-import logging  # Added for logging
+import logging  
 
 threshold = 0.9
 attendance_bp = Blueprint('attendance', __name__)
-logging.basicConfig(level=logging.INFO)  # Added for logging configuration
+logging.basicConfig(level=logging.INFO)  
 
 @attendance_bp.route('/mark_attendance', methods=['POST'])
 def mark_attendance():
@@ -22,18 +22,20 @@ def mark_attendance():
         captured_embedding = capture_face(frame_input=img)
         if captured_embedding is None:
             return jsonify({'error': 'No face detected'}), 400
+        
         with get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT employee_id, name, embedding FROM employees")
             employees = cursor.fetchall()
         min_distance = float('inf')
-        #matched_employee = None
+        
         for emp in employees:
-            emp_embedding = np.fromstring(emp['embedding'], sep=' ', dtype=float)  # TODO: Replace deprecated usage
+            emp_embedding = np.fromstring(emp['embedding'], sep=' ', dtype=float) 
             distance = np.linalg.norm(emp_embedding - captured_embedding)
             if distance < min_distance:
                 min_distance = distance
                 matched_employee = emp
+                
         if min_distance < threshold:
             return jsonify({"result": {"name": matched_employee['name'],"employee_id": matched_employee['employee_id']}}), 200
         else:
@@ -58,3 +60,4 @@ def make_attendance_entry():
     except Exception as e:
         logging.error(f"Error in make_attendance_entry: {e}")  # Added logging
         return jsonify({'error': 'Failed to mark attendance entry'}), 500  # Added error handling
+    

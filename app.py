@@ -53,9 +53,3 @@ def internal_error(error):
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 
-#need to fix- 
-#1)attendance tab, alert error message printing
-#2)registration page make layout better
-#3)database 
-#4)view attendance feature
-#5) face_recognition file 
