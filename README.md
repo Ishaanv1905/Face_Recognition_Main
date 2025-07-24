@@ -1,7 +1,7 @@
 
 # Facial Recognition Attendance Tracker
 
-A Python + Flask-based web application that uses face recognition for automatic attendance tracking.
+**A Python + Flask-based web application that uses face recognition for automatic attendance tracking.**
 
 
 ## Key Features
