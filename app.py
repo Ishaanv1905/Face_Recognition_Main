@@ -1,4 +1,3 @@
-#this is the main python file that is like a home page for the backend
 from flask import Flask, render_template,jsonify, request
 from register import register_bp
 from attendance import attendance_bp
@@ -34,21 +33,21 @@ def check_users():
     try:
         with get_db_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT COUNT(*) FROM EMPLOYEES")  # Assuming your registration table is 'users'
+            cursor.execute("SELECT COUNT(*) FROM EMPLOYEES")  
             user_count = cursor.fetchone()[0]
-            logging.info(f"User count: {user_count}")  # Added logging
+            logging.info(f"User count: {user_count}") 
         return jsonify({'user_count': user_count})
     except Exception as e:
-        logging.error(f"Error checking users: {e}")  # Added logging
-        return jsonify({'error': 'Failed to check users'}), 500  # Added error handling
+        logging.error(f"Error checking users: {e}")  
+        return jsonify({'error': 'Failed to check users'}), 500 
 
 @app.errorhandler(404)
 def not_found_error(error):
-    return jsonify({'error': 'Not found'}), 404  # Added error handler
+    return jsonify({'error': 'Not found'}), 404  
 
 @app.errorhandler(500)
 def internal_error(error):
-    return jsonify({'error': 'Internal server error'}), 500  # Added error handler
+    return jsonify({'error': 'Internal server error'}), 500 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

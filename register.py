@@ -1,4 +1,3 @@
-#python file for registrations
 from flask import Blueprint, request, jsonify
 from face_recognition import capture_face
 from database import get_db_connection
