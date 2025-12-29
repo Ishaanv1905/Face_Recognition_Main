@@ -1,7 +1,7 @@
 
 # Facial Recognition Attendance Tracker
 
-A Python + Flask-based web application that uses face recognition for automatic attendance tracking.
+**A Python + Flask-based web application that uses face recognition for automatic attendance tracking.**
 
 
 ## Key Features
@@ -17,8 +17,8 @@ A Python + Flask-based web application that uses face recognition for automatic 
 Follow the steps below to run this project locally:
 ### 1. Clone the repository
 ```bash
-  git clone https://github.com/Ishaanv1905/Face_Recognition_Main.git
-  cd face-recognition-attendance
+git clone https://github.com/Ishaanv1905/Face_Recognition_Main.git
+cd face-recognition-attendance
 ```
 ### 2. Create and activate a virtual environment
 ```bash
